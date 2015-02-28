@@ -1,0 +1,11 @@
+<ion-view view-title="Albums">
+  <ion-content>
+    <div class="list list-inset">
+
+      <div class="item" ng-repeat="a in albums" on-tap="selectAlbum(a)">
+        {{ a.name }}
+      </div>
+
+    </div>
+  </ion-content>
+</ion-view>

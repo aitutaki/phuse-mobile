@@ -132,29 +132,32 @@ angular.module('starter.controllers', [])
                 "Lat": "0",
                 "Long": "0"
               },
-              "Password": $rootScope.albumPassword,
-              "TakenOn": (new Date()).toJSON()
+              "AlbumPassword": $rootScope.albumPassword,
+              "TakenOn": (new Date()).toJSON(),
+              "ContributorIdentifier": "TC"
             };
 
-            alert(data);
+            alert("Sending " + JSON.stringify(data));
 
             $http.post($rootScope.url + "Photos", data)
-              .then(function(data) {
-                alert(data);
+              .then(function(res, status, headers) {
+                alert(JSON.stringify(res));
                 $scope.capturePhoto();
-              })
+              });
+              /*
               .error(function(err) {
                 alert(err);
               });
+              */
 
           },
           function(msg) {
             alert(msg);
           },
           {
-              quality: 100,
-              //targetWidth: 600,
-              //targetHeight: 800,
+              quality: 70,
+              targetWidth: 600,
+              targetHeight: 800,
               destinationType: Camera.DestinationType.DATA_URL,
               allowEdit: false
           });

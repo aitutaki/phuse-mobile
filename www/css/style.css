@@ -1,1 +1,48 @@
 /* Empty. Add your own CSS if you like */
+.album-cover {
+  display:block;
+  width: 90%;
+  max-width: 300px;
+  height: 300px;
+  background-color: #eee;
+  background-image: url(../img/default600.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+  margin: 20px auto 20px auto;
+}
+
+.album-overlay {
+  background-color: rgba(0,0,0,0.5);
+  padding: 10px;
+  color: white;
+  text-shadow: black 1px 1px;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.album-name {
+  font-weight: bold;
+  width: 100%;
+  overflow-x: ellipsis;
+}
+
+.album-distance {
+  font-size: 8pt;
+}
+
+.album-countdown {
+  float: right;
+}
+
+.icon-200:before {
+  font-size: 200px !important;
+  line-height: 200px !important;
+}
+
+.center {
+  text-align: center;
+}

@@ -11,7 +11,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -40,42 +40,46 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
-  .state('app.search', {
-    url: "/search",
+  .state('app.login', {
+    url: "/login",
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html"
+        controller: 'LoginCtrl',
+        templateUrl: "templates/login.html"
       }
     }
   })
 
-  .state('app.browse', {
-    url: "/browse",
+  .state('app.albums', {
+    url: "/albums",
     views: {
       'menuContent': {
-        templateUrl: "templates/browse.html"
+        controller: 'AlbumsCtrl',
+        templateUrl: "templates/albums.html"
       }
     }
   })
-    .state('app.playlists', {
-      url: "/playlists",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
 
-  .state('app.single', {
-    url: "/playlists/:playlistId",
+  .state('app.photo', {
+    url: "/photo",
     views: {
       'menuContent': {
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
+        controller: 'PhotoCtrl',
+        templateUrl: "templates/photo.html"
       }
     }
-  });
+  })
+  //newAlbumCtrl
+  .state('app.newAlbum', {
+    url: "/newAlbum",
+    views: {
+      'menuContent': {
+        controller: 'newAlbumCtrl',
+        templateUrl: "templates/newAlbum.html"
+      }
+    }
+  })
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
 });

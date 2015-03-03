@@ -1,0 +1,37 @@
+<ion-view view-title="PHUSE">
+  <ion-content>
+    <form name="albumForm">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" ng-model="data.AlbumName" placeholder="Album Name" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="date" ng-model="data.ContributeFromDate" placeholder="Start Date" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="time" ng-model="data.ContributeFromTime" placeholder="Start Time" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="data.VenueName" placeholder="Venue Name" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="data.VenueAddress" placeholder="Venue Address" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="data.VenueWifiName" placeholder="Venue WiFi Name" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="data.VenuePassword" placeholder="Venue WiFi Password" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="data.Password" placeholder="Album Password" ng-required="true">
+        </label>
+
+        <button class="button button-positive button-full" ng-click="save()">
+          Save
+        </button>
+      </div>
+    </form>
+
+  </ion-content>
+</ion-view>

@@ -1,11 +1,25 @@
 <ion-view view-title="Albums">
   <ion-content>
-    <div class="list list-inset">
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="refresh()">
+    </ion-refresher>
+      <!--
+      <div class="list card">
 
-      <div class="item" ng-repeat="a in albums" on-tap="selectAlbum(a)">
-        {{ a.name }}
+        <a href="#" class="item item-icon-left" ng-repeat="a in albums">
+          <i class="icon ion-images"></i>
+          {{a.AlbumName}}
+        </a>
+
       </div>
+      -->
 
-    </div>
+        <div class="album-cover" style="background-image: url({{ getCoverImage(a) }})" on-tap="alert(a.AlbumName)" ng-repeat="a in albums" ng-click="select(a)">
+          <div class="album-overlay">
+            <div class="album-name">{{a.AlbumID}} : {{a.AlbumName}}</div>
+            <div class="album-countdown">{{ a.timeRemaining || "00:00:00" }}</div>
+            <div class="album-distance">{{a.DistanceInMetres}}m away</div>
+          </div>
+        </div>
+
   </ion-content>
 </ion-view>

@@ -2,8 +2,8 @@ angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $rootScope, $ionicModal, $timeout) {
   // Form data for the login modal
-  $rootScope.url = "http://www.papmyday.com/api/";
-  $rootScope.imageURL = "http://www.papmyday.com/";
+  $rootScope.url = "http://www.phuse-app.com/api/";
+  $rootScope.imageURL = "http://www.phuse-app.com/";
   $scope.loginData = {};
 
   // Create the login modal that we will use later

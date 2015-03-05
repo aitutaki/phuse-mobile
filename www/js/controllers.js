@@ -137,11 +137,8 @@ angular.module('starter.controllers', [])
               "ContributorIdentifier": "TC"
             };
 
-            alert("Sending " + JSON.stringify(data));
-
             $http.post($rootScope.url + "Photos", data)
               .then(function(res, status, headers) {
-                alert(JSON.stringify(res));
                 $scope.capturePhoto();
               });
               /*

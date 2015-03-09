@@ -152,16 +152,18 @@ angular.module('starter.controllers', [])
             $http.post($rootScope.url + "Photos", data)
               .then(function(res, status, headers) {
                 $scope.capturePhoto();
+              }, function(err) {
+                alert(err);
               });
 
           },
           function(msg) {
-            //alert(msg);
+            alert(msg);
           },
           {
               quality: 70,
-              //targetWidth: 600,
-              //targetHeight: 800,
+              targetWidth: 600,
+              targetHeight: 800,
               destinationType: Camera.DestinationType.DATA_URL,
               allowEdit: false
           });

@@ -30,6 +30,10 @@
   overflow-x: ellipsis;
 }
 
+.album-venue {
+  font-size: 8pt;
+}
+
 .album-distance {
   font-size: 8pt;
 }

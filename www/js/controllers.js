@@ -229,7 +229,7 @@ angular.module('starter.controllers', [])
 
           },
           function(msg) {
-            alert(msg);
+            //alert(msg);
           },
           {
               quality: 70,

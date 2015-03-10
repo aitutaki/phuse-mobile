@@ -1,8 +1,16 @@
 <ion-view view-title="{{album.AlbumName}}">
   <ion-content>
 
+<!--
     <div class="center">
       <button class="button button-icon icon ion-camera icon-200" ng-click="capturePhoto()"></button>
+    </div>
+-->
+
+    <canvas id="photoCanvas" width="300" height="300" ng-click="capturePhoto()"></canvas>
+
+    <div class="photo-overlay">
+      <img src="img/default600.jpg" />
     </div>
 
   </ion-content>

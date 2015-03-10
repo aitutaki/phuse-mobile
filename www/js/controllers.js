@@ -25,8 +25,14 @@ angular.module('starter.controllers', [])
 
   ionic.Platform.ready(function(){
     // will execute when device is ready, or immediately if the device is already ready.
-    var dev = ionic.Platform.device();
-    $rootScope.uuid = dev.uuid;
+    try {
+      var dev = ionic.Platform.device();
+      $rootScope.uuid = dev.uuid;
+      $rootScope.platform = dev.platform;
+      $rootScope.isDroid = ($rootScope.platform.toLowerCase() == "android");
+    } catch(e) {
+      // nothing
+    }
   });
 
   // Perform the login action when the user submits the login form
@@ -42,7 +48,7 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($scope, $location, $rootScope) {
+.controller('HomeCtrl', function($scope, $location, $rootScope, $ionicPopup) {
   $scope.selectAlbum = function() {
     $location.url("/app/albums");
   };
@@ -131,7 +137,66 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PhotoCtrl', function($scope, $location, $rootScope, $http) {
+.controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $timeout) {
+  var media = null;
+  $scope.capturePhoto = function(data) {
+    // window.plugin.CanvasCamera.takePicture(function(photoData) {
+    var img = $scope.objCanvas.toDataURL("image/jpeg");
+    img = img.replace("data:image/jpeg;base64,", "");
+    var data = {
+      "AlbumId": $rootScope.album.AlbumID,
+      "Type": "jpg",
+      "MediaData": img,
+      "Location": {
+        "Lat": "0",
+        "Long": "0"
+      },
+      "AlbumPassword": $rootScope.albumPassword,
+      "TakenOn": (new Date()).toJSON(),
+      "ContributorIdentifier": $rootScope.uuid
+    };
+
+    if (!media)
+    {
+      if ($rootScope.isDroid) {
+        media = new Media("/android_assets/www/snd/camera.mp3", null, null);
+      }
+      else
+      {
+        media = new Media("snd/camera.mp3", null, null);
+      }
+    }
+    media.play();
+
+    $http.post($rootScope.url + "Photos", data)
+      .then(function(data) {
+        //$scope.capturePhoto();
+      }, function(err) {
+    });
+    // });
+  };
+
+  $scope.init = false;
+  $scope.objCanvas = document.getElementById("photoCanvas");
+  window.plugin.CanvasCamera.initialize($scope.objCanvas);
+  var opt = {
+      quality: 75,
+      destinationType: window.plugin.CanvasCamera.DestinationType.DATA_URL,
+      encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
+      saveToPhotoAlbum:false,
+      correctOrientation:true,
+      width:800,
+      height:600
+  };
+  var h = document.getElementsByTagName("ion-content")[0].clientHeight;
+  var w = document.getElementsByTagName("ion-content")[0].clientWidth;
+  //objCanvas.height = h;
+  //objCanvas.width = w;
+  window.plugin.CanvasCamera.start(opt);
+
+})
+
+.controller('PhotoCtrl2', function($scope, $location, $rootScope, $http) {
   $scope.capturePhoto = function() {
     try {
       navigator.camera.getPicture(

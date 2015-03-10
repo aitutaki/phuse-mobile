@@ -176,6 +176,13 @@ angular.module('starter.controllers', [])
     // });
   };
 
+  function resizer() {
+    var h = window.innerHeight;
+    var w = window.innerWidth;
+    $scope.objCanvas.height = h;
+    $scope.objCanvas.width = w;
+  }
+
   $scope.init = false;
   $scope.objCanvas = document.getElementById("photoCanvas");
   window.plugin.CanvasCamera.initialize($scope.objCanvas);
@@ -184,15 +191,14 @@ angular.module('starter.controllers', [])
       destinationType: window.plugin.CanvasCamera.DestinationType.DATA_URL,
       encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
       saveToPhotoAlbum:false,
-      correctOrientation:true,
+      correctOrientation:false,
       width:800,
       height:600
   };
-  var h = document.getElementsByTagName("ion-content")[0].clientHeight;
-  var w = document.getElementsByTagName("ion-content")[0].clientWidth;
-  //objCanvas.height = h;
-  //objCanvas.width = w;
+
   window.plugin.CanvasCamera.start(opt);
+  window.addEventListener("resize", resizer);
+  resizer();
 
 })
 

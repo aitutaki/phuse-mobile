@@ -193,7 +193,7 @@ angular.module('starter.controllers', [])
       quality: 75,
       destinationType: window.plugin.CanvasCamera.DestinationType.DATA_URL,
       encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
-      saveToPhotoAlbum:true,
+      saveToPhotoAlbum:false,
       correctOrientation:false
       //width:800,
       //height:600

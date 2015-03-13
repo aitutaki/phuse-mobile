@@ -1,4 +1,24 @@
 /* Empty. Add your own CSS if you like */
+ion-header-bar {
+  background-color: #00a19c !important;
+}
+
+button.button.back-button.buttons.button-clear.header-item {
+  color: white !important;
+}
+
+.bar.bar-stable .title {
+  color: white !important;
+}
+
+.home-page {
+  background-color: #00a19c;
+  background-image: url(../img/home-page.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding-top: 320px;
+}
+
 .album-cover {
   display:block;
   width: 90%;
@@ -40,6 +60,22 @@
 
 .album-countdown {
   float: right;
+}
+
+#photo-canvas {
+  z-index: 8888;
+}
+
+.photo-overlay {
+  line-height: 2ex;
+}
+
+.photo-overlay img {
+  height: 30px;
+  float: left;
+  margin-right: 20px;
+  border: 2px solid white;
+  box-shadow: 1px 1px 1px black;
 }
 
 .icon-200:before {

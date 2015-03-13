@@ -139,41 +139,44 @@ angular.module('starter.controllers', [])
 
 .controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $timeout) {
   var media = null;
+  $scope.thumbs = 0;
+
   $scope.capturePhoto = function(data) {
-    // window.plugin.CanvasCamera.takePicture(function(photoData) {
-    var img = $scope.objCanvas.toDataURL("image/jpeg");
-    img = img.replace("data:image/jpeg;base64,", "");
-    var data = {
-      "AlbumId": $rootScope.album.AlbumID,
-      "Type": "jpg",
-      "MediaData": img,
-      "Location": {
-        "Lat": "0",
-        "Long": "0"
-      },
-      "AlbumPassword": $rootScope.albumPassword,
-      "TakenOn": (new Date()).toJSON(),
-      "ContributorIdentifier": $rootScope.uuid
-    };
+    window.plugin.CanvasCamera.takePicture(function(photoData) {
+      //alert(JSON.stringify(photoData));
+      var data = {
+        "PhotoId": (new Date()).valueOf(),
+        "AlbumId": $rootScope.album.AlbumID,
+        "Type": "jpg",
+        "MediaData": photoData.imageURI,
+        "Location": {
+          "Lat": "0",
+          "Long": "0"
+        },
+        "AlbumPassword": $rootScope.albumPassword,
+        "TakenOn": (new Date()).toJSON(),
+        "ContributorIdentifier": $rootScope.uuid
+      };
 
-    if (!media)
-    {
-      if ($rootScope.isDroid) {
-        media = new Media("/android_assets/www/snd/camera.mp3", null, null);
-      }
-      else
-      {
-        media = new Media("snd/camera.mp3", null, null);
-      }
-    }
-    media.play();
+      $scope.thumbs++;
 
-    $http.post($rootScope.url + "Photos", data)
-      .then(function(data) {
-        //$scope.capturePhoto();
-      }, function(err) {
+      $http.post($rootScope.url + "Photos", data)
+        .then(function(data) {
+          $scope.thumbs--;
+          /*
+          for (var i=0; i < $scope.thumbs.length; i++) {
+            if ($scope.thumbs[i].PhotoId == data.PhotoId) {
+              $scope.thumbs.splice(i,1);
+              break;
+            }
+          }
+          */
+        }, function(err) {
+          alert("err " + err)
+      });
+    }, function(err) {
+      alert(err);
     });
-    // });
   };
 
   function resizer() {
@@ -190,10 +193,10 @@ angular.module('starter.controllers', [])
       quality: 75,
       destinationType: window.plugin.CanvasCamera.DestinationType.DATA_URL,
       encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
-      saveToPhotoAlbum:false,
-      correctOrientation:false,
-      width:800,
-      height:600
+      saveToPhotoAlbum:true,
+      correctOrientation:false
+      //width:800,
+      //height:600
   };
 
   window.plugin.CanvasCamera.start(opt);
@@ -222,7 +225,8 @@ angular.module('starter.controllers', [])
 
             $http.post($rootScope.url + "Photos", data)
               .then(function(res, status, headers) {
-                $scope.capturePhoto();
+                alert("ok");
+                //$scope.capturePhoto();
               }, function(err) {
                 alert(err);
               });
@@ -233,8 +237,8 @@ angular.module('starter.controllers', [])
           },
           {
               quality: 70,
-              targetWidth: 600,
-              targetHeight: 800,
+              //targetWidth: 600,
+              //targetHeight: 800,
               destinationType: Camera.DestinationType.DATA_URL,
               allowEdit: false
           });

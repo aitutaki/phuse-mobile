@@ -139,7 +139,7 @@ angular.module('starter.controllers', [])
 
 .controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $timeout) {
   var media = null;
-  $scope.thumbs = 0;
+  $scope.uploads = [];
 
   $scope.capturePhoto = function(data) {
     window.plugin.CanvasCamera.takePicture(function(photoData) {
@@ -158,11 +158,11 @@ angular.module('starter.controllers', [])
         "ContributorIdentifier": $rootScope.uuid
       };
 
-      $scope.thumbs++;
+      $scope.uploads.push(data.PhotoId);
 
       $http.post($rootScope.url + "Photos", data)
         .then(function(data) {
-          $scope.thumbs--;
+          $scope.uploads.shift();
           /*
           for (var i=0; i < $scope.thumbs.length; i++) {
             if ($scope.thumbs[i].PhotoId == data.PhotoId) {
@@ -187,21 +187,23 @@ angular.module('starter.controllers', [])
   }
 
   $scope.init = false;
-  $scope.objCanvas = document.getElementById("photoCanvas");
-  window.plugin.CanvasCamera.initialize($scope.objCanvas);
-  var opt = {
-      quality: 75,
-      destinationType: window.plugin.CanvasCamera.DestinationType.DATA_URL,
-      encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
-      saveToPhotoAlbum:false,
-      correctOrientation:false
-      //width:800,
-      //height:600
-  };
+  $scope.objCanvas = document.getElementById("photo-canvas");
+  if (window.plugin && window.plugin.CanvasCamera) {
+    window.plugin.CanvasCamera.initialize($scope.objCanvas);
+    var opt = {
+        quality: 75,
+        destinationType: window.plugin.CanvasCamera.DestinationType.DATA_URL,
+        encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
+        saveToPhotoAlbum:false,
+        correctOrientation:false
+        //width:800,
+        //height:600
+    };
 
-  window.plugin.CanvasCamera.start(opt);
-  //window.addEventListener("resize", resizer);
-  //resizer();
+    window.plugin.CanvasCamera.start(opt);
+    //window.addEventListener("resize", resizer);
+    //resizer();
+  }
 
 })
 
@@ -352,7 +354,17 @@ angular.module('starter.controllers', [])
       template: "<i class='icon ion-load-c ion-spin'></i>&nbsp;Getting albums..."
     });
     $http.get(url).then(function(data) {
-      $scope.albums = data.data.filter(function(a) {
+      $scope.albums = data.data;
+      for (var i=0; i < $scope.albums.length; i++) {
+        var a = $scope.albums[i];
+        var d = new Date(a.ContributionUntil);
+        var now = new Date();
+        if (d > now) {
+          a.timeRemaining = $scope.getTimeRemaining(a);
+        }
+      }
+      /*
+      .filter(function(a) {
         var d = new Date(a.ContributionUntil);
         var now = new Date();
         if (d > now) {
@@ -364,9 +376,10 @@ angular.module('starter.controllers', [])
           return false;
         }
       });
+      */
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
-      $scope.$apply()
+      if (!$scope.$$phase) $scope.$apply()
     });
   }
 

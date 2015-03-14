@@ -8,7 +8,17 @@
 -->
 
 
-    <canvas id="photoCanvas" width="300" height="300" ng-click="capturePhoto()"></canvas>
+    <canvas id="photo-canvas" width="300" height="300" ng-click="capturePhoto()"></canvas>
+
+    <button class="button button-clear button-light camera-button" ng-click="capturePhoto()">
+      <i class="ionicon ion-camera"></i>
+    </button>
+
+    <div class="photo-overlay" ng-show="uploads.length > 0">
+      <div class="icon-container" ng-repeat="i in uploads">
+        <i class="ionicon ion-images"></i>
+      </div>
+    </div>
 
   </ion-content>
 </ion-view>

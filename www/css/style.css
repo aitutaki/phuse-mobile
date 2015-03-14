@@ -66,23 +66,96 @@ button.button.back-button.buttons.button-clear.header-item {
   z-index: 8888;
 }
 
+.camera-button {
+  position: absolute;
+  z-index: 9998;
+  bottom: 40px;
+  font-size: 36pt;
+  color: white;
+  text-shadow: black 1px 1px;
+}
+
 .photo-overlay {
-  line-height: 2ex;
+  position: absolute;
+  z-index: 9999;
+  bottom: 0px;
+  width: 100%;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
 }
 
-.photo-overlay img {
-  height: 30px;
+.icon-container {
   float: left;
-  margin-right: 20px;
-  border: 2px solid white;
-  box-shadow: 1px 1px 1px black;
+  width: 40px;
+  text-align: center;
+  margin-top: 0.5em;
 }
 
-.icon-200:before {
-  font-size: 200px !important;
-  line-height: 200px !important;
+.photo-overlay i.ionicon {
+  text-align: center;
+  font-size: 21pt;
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -ms-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
 }
 
 .center {
   text-align: center;
+}
+
+.ng-hide-add {
+  height: 43px;
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -ms-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+}
+
+.ng-hide-add-active {
+  height: 0px;
+}
+
+.ng-hide-remove {
+  height: 0px;
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -ms-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+}
+
+.ng-hide-remove-active {
+  height: 43px;
+}
+
+.ng-enter {
+  opacity: 0;
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -ms-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+}
+
+.ng-enter-active {
+  opacity: 1;
+}
+
+.ng-leave {
+  opacity: 1;
+  width: 40px;
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -ms-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+
+}
+
+.ng-leave-active {
+  opacity: 0;
+  width: 0px;
 }

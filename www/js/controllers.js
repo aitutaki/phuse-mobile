@@ -200,8 +200,8 @@ angular.module('starter.controllers', [])
   };
 
   window.plugin.CanvasCamera.start(opt);
-  window.addEventListener("resize", resizer);
-  resizer();
+  //window.addEventListener("resize", resizer);
+  //resizer();
 
 })
 

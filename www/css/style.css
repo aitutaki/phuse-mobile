@@ -82,13 +82,14 @@ button.button.back-button.buttons.button-clear.header-item {
   width: 100%;
   background-color: rgba(0,0,0,0.5);
   color: white;
+  height: 43px;
+  padding-top: 0.5em;
 }
 
 .icon-container {
   float: left;
   width: 40px;
   text-align: center;
-  margin-top: 0.5em;
 }
 
 .photo-overlay i.ionicon {

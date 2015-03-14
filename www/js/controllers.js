@@ -196,59 +196,14 @@ angular.module('starter.controllers', [])
         encodingType: window.plugin.CanvasCamera.EncodingType.JPEG,
         saveToPhotoAlbum:false,
         correctOrientation:false
-        //width:800,
-        //height:600
     };
 
     window.plugin.CanvasCamera.start(opt);
+  }
+
     //window.addEventListener("resize", resizer);
     //resizer();
-  }
 
-})
-
-.controller('PhotoCtrl2', function($scope, $location, $rootScope, $http) {
-  $scope.capturePhoto = function() {
-    try {
-      navigator.camera.getPicture(
-          function(imgData) {
-            var data = {
-              "AlbumId": $rootScope.album.AlbumID,
-              "Type": "jpg",
-              "MediaData": imgData,
-              "Location": {
-                "Lat": "0",
-                "Long": "0"
-              },
-              "AlbumPassword": $rootScope.albumPassword,
-              "TakenOn": (new Date()).toJSON(),
-              "ContributorIdentifier": $rootScope.uuid
-            };
-
-            $http.post($rootScope.url + "Photos", data)
-              .then(function(res, status, headers) {
-                alert("ok");
-                //$scope.capturePhoto();
-              }, function(err) {
-                alert(err);
-              });
-
-          },
-          function(msg) {
-            //alert(msg);
-          },
-          {
-              quality: 70,
-              //targetWidth: 600,
-              //targetHeight: 800,
-              destinationType: Camera.DestinationType.DATA_URL,
-              allowEdit: false
-          });
-    }
-    catch(e) {
-      //alert(e);
-    }
-  }
 })
 
 .controller('AlbumsCtrl', function($scope, $rootScope, $ionicLoading, $ionicPopup, $http, $location, $interval) {

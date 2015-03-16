@@ -1,6 +1,6 @@
-<ion-view view-title="Albums">
+<ion-view view-title="{{ 'albums-title' | translate }}">
   <ion-content>
-    <ion-refresher pulling-text="Pull to refresh" on-refresh="refresh()">
+    <ion-refresher pulling-text="{{ 'pull-to-refresh' | translate }}" on-refresh="refresh()">
     </ion-refresher>
       <!--
       <div class="list card">
@@ -19,7 +19,7 @@
             <div class="album-venue">{{a.VenueName}}</div>
 
             <div class="album-countdown">{{ a.timeRemaining || "00:00:00" }}</div>
-            <div class="album-distance">{{a.DistanceInMiles}} miles away</div>
+            <div class="album-distance">{{a.DistanceInMiles}} {{ 'albums-distance' | translate }}</div>
           </div>
         </div>
 

@@ -145,7 +145,58 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $timeout, $translate) {
+.controller('PhotoCtrl', function($scope, $location, $rootScope, $http) {
+  $scope.uploads = [];
+
+  $scope.capturePhoto = function() {
+    try {
+      navigator.camera.getPicture(
+          function(imgData) {
+            var data = {
+              "PhotoId": (new Date()).valueOf(),
+              "AlbumId": $rootScope.album.AlbumID,
+              "Type": "jpg",
+              "MediaData": imgData,
+              "Location": {
+                "Lat": "0",
+                "Long": "0"
+              },
+              "AlbumPassword": $rootScope.albumPassword,
+              "TakenOn": (new Date()).toJSON(),
+              "ContributorIdentifier": $rootScope.uuid
+            };
+
+            $scope.uploads.push(data.PhotoId);
+            $http.post($rootScope.url + "Photos", data)
+              .success(function(res, status, headers) {
+                $scope.uploads.shift();
+                //$scope.capturePhoto();
+              })
+              .error(function(err) {
+                $scope.uploads.shift();
+                //alert("ERROR 1: " + JSON.stringify(err));
+              });
+
+          },
+          function(msg) {
+            // alert("ERROR 2: " + msg);
+          },
+          {
+              quality: 70,
+              destinationType: Camera.DestinationType.DATA_URL,
+              allowEdit: false,
+              encodingType: Camera.EncodingType.JPEG,
+              saveToPhotoAlbum: false
+          });
+    }
+    catch(e) {
+      alert(e);
+    }
+  }
+})
+
+/*
+.controller('PhotoCtrl3', function($scope, $location, $rootScope, $http, $timeout, $translate) {
   var media = null;
   $scope.uploads = [];
 
@@ -170,15 +221,6 @@ angular.module('starter.controllers', [])
 
       $http.post($rootScope.url + "Photos", data)
         .then(function(data) {
-          $scope.uploads.shift();
-          /*
-          for (var i=0; i < $scope.thumbs.length; i++) {
-            if ($scope.thumbs[i].PhotoId == data.PhotoId) {
-              $scope.thumbs.splice(i,1);
-              break;
-            }
-          }
-          */
         }, function(err) {
           alert("err " + err)
       });
@@ -215,6 +257,7 @@ angular.module('starter.controllers', [])
     //resizer();
 
 })
+*/
 
 .controller('AlbumsCtrl', function($scope, $rootScope, $ionicLoading, $ionicPopup, $http, $location, $interval, $translate) {
   $scope.albums = [];

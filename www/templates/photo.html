@@ -1,14 +1,17 @@
 <ion-view view-title="{{album.AlbumName}}">
   <ion-content scroll="false">
 
-<!--
     <div class="center">
       <button class="button button-icon icon ion-camera icon-200" ng-click="capturePhoto()"></button>
     </div>
--->
 
 
     <canvas id="photo-canvas" width="300" height="300" ng-click="capturePhoto()"></canvas>
+
+    <div class="photo-count" ng-show="uploads.length > 0">
+        <i class="ionicon ion-images"></i>
+        {{ uploads.length }} photos uploading.
+    </div>
 
     <!--
     <button class="button button-clear button-light camera-button" ng-click="capturePhoto()">
@@ -16,11 +19,13 @@
     </button>
     -->
 
+    <!--
     <div class="photo-overlay" ng-show="uploads.length > 0">
       <div class="icon-container" ng-repeat="i in uploads">
         <i class="ionicon ion-images"></i>
       </div>
     </div>
+    -->
 
   </ion-content>
 </ion-view>

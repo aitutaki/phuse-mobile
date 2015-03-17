@@ -183,10 +183,13 @@ angular.module('starter.controllers', [])
           },
           {
               quality: 70,
+              targetWidth: 1000,
+              targetHeight: 1000,
               destinationType: Camera.DestinationType.DATA_URL,
               allowEdit: false,
               encodingType: Camera.EncodingType.JPEG,
-              saveToPhotoAlbum: false
+              saveToPhotoAlbum: false,
+              correctOrientation: true
           });
     }
     catch(e) {

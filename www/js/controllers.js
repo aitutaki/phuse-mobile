@@ -4,7 +4,7 @@ angular.module('starter.controllers', [])
   // Form data for the login modal
   $rootScope.url = "http://www.phuse-app.com/api/";
   $rootScope.imageURL = "http://www.phuse-app.com/";
-  $scope.loginData = {};
+  $rootScope.creds = JSON.stringify(window.localStorage.getItem("creds"));
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -52,35 +52,33 @@ angular.module('starter.controllers', [])
 
 
 .controller('HomeCtrl', function($scope, $location, $rootScope, $ionicPopup, $translate) {
+  $scope.creds = $rootScope.creds;
   $scope.selectAlbum = function() {
     $location.url("/app/albums");
   };
 
   $scope.createAlbum = function() {
-    /*
     if ($rootScope.creds) {
-      $location.url("/app/newAlbum");
+      $location.url("/app/album");
     }
     else
     {
       $location.url("/app/login");
     }
-    */
-
-    $translate(['create-new-album', 'create-coming-soon']).then(function(trans) {
-      $ionicPopup.alert({
-         title: trans['create-new-album'],
-         template: trans['create-coming-soon']
-       });
-     })
   }
 
 })
 
-.controller('newAlbumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate) {
+.controller('albumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate) {
   $scope.data = {
     contributeFromDate: new Date(),
-    contributeFromTime: new Date()
+    contributeFromTime: new Date(),
+    AlbumName: "",
+    VenueName: "",
+    VenueAddress: "",
+    VenueWifiName: "",
+    VenuePassword: "",
+    Password: ""
   };
 
   $scope.save = function() {
@@ -93,7 +91,7 @@ angular.module('starter.controllers', [])
 
   //  $scope.data.contributeFrom =
 
-    $http.post($rootScope.url + "Albums", $scope.data)
+    $http.post($rootScope.url + "Albums/Post", $scope.data)
       .then(function(data) {
         $ionicPopup.alert({
            title: "New Album",
@@ -122,7 +120,8 @@ angular.module('starter.controllers', [])
       .then(function(data) {
         if (data.data && data.data == "true") {
           $rootScope.creds = data.data;
-          $location.url("/app/newAlbum");
+          window.localStorage.setItem("creds", JSON.stringify($scope.data));
+          $location.url("/app/album");
         }
         else
         {

@@ -25,7 +25,8 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
     'albums-login-error': 'Unable to login',
     'error': 'Error',
     'albums-login-bad': 'Incorrect password',
-    'albums-enter-password': 'Enter album password'
+    'albums-enter-password': 'Enter album password',
+    'login': 'Login'
   });
 
   $translateProvider.translations('es', {
@@ -44,7 +45,8 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
     'albums-login-error': 'Incapaz de iniciar sesión',
     'error': 'Error',
     'albums-login-bad': 'Identificación no son correctos',
-    'albums-enter-password': 'Introduzca álbum contraseña'
+    'albums-enter-password': 'Introduzca álbum contraseña',
+    'login': 'Ingresar'
   });
 
 
@@ -101,13 +103,12 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
       }
     }
   })
-  //newAlbumCtrl
-  .state('app.newAlbum', {
-    url: "/newAlbum",
+  .state('app.album', {
+    url: "/album",
     views: {
       'menuContent': {
-        controller: 'newAlbumCtrl',
-        templateUrl: "templates/newAlbum.html"
+        controller: 'albumCtrl',
+        templateUrl: "templates/album.html"
       }
     }
   })
@@ -136,5 +137,6 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
   });
 });

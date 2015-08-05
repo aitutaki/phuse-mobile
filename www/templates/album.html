@@ -1,0 +1,60 @@
+<ion-view view-title="New Album">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-positive" ng-click="save()">
+      Save
+    </button>
+  </ion-nav-buttons>
+  <ion-content>
+    <form name="albumForm">
+      <div class="list list-inset">
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-image placeholder-icon"></i>
+          <span class="input-label">Album Name</span>
+          <input type="text" ng-model="data.AlbumName" placeholder="Album Name" ng-required="true">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-calendar placeholder-icon"></i>
+          <span class="input-label">Start Date</span>
+          <input type="date" ng-model="data.ContributeFromDate" placeholder="Start Date" ng-required="true">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-clock placeholder-icon"></i>
+          <span class="input-label">Start Time</span>
+          <input type="time" ng-model="data.ContributeFromTime" placeholder="Start Time" ng-required="true">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-flag placeholder-icon"></i>
+          <span class="input-label">Venue Name</span>
+          <input type="text" ng-model="data.VenueName" placeholder="Venue Name" ng-required="true">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-map placeholder-icon"></i>
+          <span class="input-label">Venue Address</span>
+          <input type="text" ng-model="data.VenueAddress" placeholder="Venue Address" ng-required="false">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-wifi placeholder-icon"></i>
+          <span class="input-label">Venue WiFi Name</span>
+          <input type="text" ng-model="data.VenueWifiName" placeholder="Venue WiFi Name" ng-required="false">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-locked placeholder-icon"></i>
+          <span class="input-label">Venue WiFi Password</span>
+          <input type="text" ng-model="data.VenuePassword" placeholder="Venue WiFi Password" ng-required="false">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <i class="icon ion-locked placeholder-icon"></i>
+          <span class="input-label">Album Password</span>
+          <input type="text" ng-model="data.Password" placeholder="Album Password" ng-required="true">
+        </label>
+
+        <!--
+        <button class="button button-positive button-full" ng-click="save()">
+          Save
+        </button>
+        -->
+      </div>
+    </form>
+
+  </ion-content>
+</ion-view>

@@ -1,10 +1,9 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $rootScope, $http, $ionicModal, $timeout, $ionicPopup, User) {
   // Form data for the login modal
   $rootScope.url = "http://www.phuse-app.com/api/";
   $rootScope.imageURL = "http://www.phuse-app.com/";
-  $rootScope.creds = JSON.stringify(window.localStorage.getItem("creds"));
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -32,7 +31,22 @@ angular.module('starter.controllers', [])
       var dev = ionic.Platform.device();
       $rootScope.uuid = dev.uuid;
       $rootScope.platform = dev.platform;
-      $rootScope.isDroid = ($rootScope.platform.toLowerCase() == "android");
+      $rootScope.isDroid = (($rootScope.platform || "").toLowerCase() == "android");
+
+      var creds = User.getUserData();
+      if (creds) {
+        var prom = User.login(creds);
+        prom.then(function() {
+          //$ionicLoading.hide();
+        });
+        prom.catch(function() {
+          $ionicPopup.alert({
+           title: 'Login',
+           template: 'Unable to login.'
+         });
+        });
+      }
+
     } catch(e) {
       // nothing
     }
@@ -51,28 +65,74 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($scope, $location, $rootScope, $ionicPopup, $translate) {
-  $scope.creds = $rootScope.creds;
+.controller('HomeCtrl', function($scope, $location, $rootScope, $ionicPopup, $translate, User) {
   $scope.selectAlbum = function() {
     $location.url("/app/albums");
   };
 
   $scope.createAlbum = function() {
-    if ($rootScope.creds) {
+    if (User.isLoggedIn()) {
       $location.url("/app/album");
     }
     else
     {
       $location.url("/app/login");
     }
-  }
+  };
+
+  $scope.getUsername = function() {
+    var u = User.getUserData() || {};
+    return u.UserName || "";
+  };
+
+  $scope.isLoggedIn = function() {
+    return User.isLoggedIn();
+  };
+
+  $scope.logout = function() {
+    User.logout();
+  };
 
 })
 
-.controller('albumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate) {
+.controller('MenuCtrl', function($scope, $location, $rootScope, $ionicPopup, $translate, User, Album) {
+  $scope.creds = $rootScope.creds;
+  $scope.recents = [];
+
+  $scope.isLoggedIn = function() {
+    return User.isLoggedIn();
+  };
+
+  $scope.logout = function() {
+    User.logout();
+  };
+
+  function getRecent() {
+    return User.getRecent();
+  };
+
+  $scope.select = function(obj) {
+    Album.setCurrent(obj);
+    $location.url("/app/photo?albumID=" + obj.AlbumID);
+  };
+
+  $scope.recents = getRecent();
+  $scope.createAlbum = function() {
+    if (User.isLoggedIn()) {
+      $location.url("/app/album");
+    }
+    else
+    {
+      $location.url("/app/login");
+    }
+  };
+
+})
+
+.controller('albumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $routeParams) {
   $scope.data = {
-    contributeFromDate: new Date(),
-    contributeFromTime: new Date(),
+    ContributeFromDate: null,
+    ContributeFromTime: null,
     AlbumName: "",
     VenueName: "",
     VenueAddress: "",
@@ -109,43 +169,66 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('LoginCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate) {
+.controller('LoginCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $ionicLoading, User) {
   $scope.data = {
-    username: "",
-    password: ""
+    UserName: "",
+    Password: ""
   };
 
+  function _loginOK() {
+    $ionicLoading.hide();
+    $location.url("/app/album");
+  }
+
+  function _loginFailed() {
+    $ionicLoading.hide();
+    $translate(['error', 'albums-login-error']).then(function(trans) {
+      $ionicPopup.alert({
+         title: trans.error,
+         template: trans['albums-login-error']
+       });
+    });
+  }
+
   $scope.login = function() {
-    $http.post($rootScope.url + "Account/Login", $scope.data)
-      .then(function(data) {
-        if (data.data && data.data == "true") {
-          $rootScope.creds = data.data;
-          window.localStorage.setItem("creds", JSON.stringify($scope.data));
-          $location.url("/app/album");
-        }
-        else
-        {
-          $translate(['error', 'albums-login-error']).then(function(trans) {
-            $ionicPopup.alert({
-               title: trans.error,
-               template: trans['albums-login-error']
-             });
-          })
-        }
-      });
-      /*
-      .error(function(data) {
-        $ionicPopup.alert({
-           title: "Error",
-           template: "Unable to login."
-         });
-      });
-      */
+    $ionicLoading.show();
+    var prom = User.login($scope.data);
+    prom.then(_loginOK, _loginFailed);
   };
 })
 
-.controller('PhotoCtrl', function($scope, $location, $rootScope, $http) {
+.controller('SignUpCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $ionicLoading, User) {
+  $scope.data = {
+    UserName: "",
+    Password: "",
+    EmailAddress: ""
+  };
+
+  function _loginOK() {
+    $ionicLoading.hide();
+    $location.url("/app/album");
+  }
+
+  function _loginFailed() {
+    $ionicLoading.hide();
+    $translate(['error', 'albums-signup-error']).then(function(trans) {
+      $ionicPopup.alert({
+         title: trans.error,
+         template: trans['albums-signup-error']
+       });
+    });
+  }
+
+  $scope.signup = function() {
+    $ionicLoading.show();
+    var prom = User.signup($scope.data);
+    prom.then(_loginOK, _loginFailed);
+  };
+})
+
+.controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $routeParams, Album) {
   $scope.uploads = [];
+  var albumID = $routeParams.albumID;
 
   $scope.capturePhoto = function() {
     try {
@@ -153,14 +236,14 @@ angular.module('starter.controllers', [])
           function(imgData) {
             var data = {
               "PhotoId": (new Date()).valueOf(),
-              "AlbumId": $rootScope.album.AlbumID,
+              "AlbumId": Album.getCurrent().AlbumId,
+              "AlbumPassword": Album.getCurrent().pwd,
               "Type": "jpg",
               "MediaData": imgData,
               "Location": {
                 "Lat": "0",
                 "Long": "0"
               },
-              "AlbumPassword": $rootScope.albumPassword,
               "TakenOn": (new Date()).toJSON(),
               "ContributorIdentifier": $rootScope.uuid
             };
@@ -173,7 +256,11 @@ angular.module('starter.controllers', [])
               })
               .error(function(err) {
                 $scope.uploads.shift();
-                //alert("ERROR 1: " + JSON.stringify(err));
+                //alert("ERROR " + JSON.stringify(err));
+                $ionicPopup.alert({
+                 title: 'Upload',
+                 template: 'Unable to upload photo.'
+               });
               });
 
           },
@@ -192,7 +279,10 @@ angular.module('starter.controllers', [])
           });
     }
     catch(e) {
-      alert(e);
+      $ionicPopup.alert({
+       title: 'Upload',
+       template: 'Unable to upload photo.'
+     });
     }
   }
 })
@@ -261,7 +351,7 @@ angular.module('starter.controllers', [])
 })
 */
 
-.controller('AlbumsCtrl', function($scope, $rootScope, $ionicLoading, $ionicPopup, $http, $location, $interval, $translate) {
+.controller('AlbumsCtrl', function($scope, $rootScope, $ionicLoading, $ionicPopup, $http, $location, $interval, $translate, Album) {
   $scope.albums = [];
   $scope.coords = null;
   $scope.data = { pwd: "" };
@@ -291,13 +381,31 @@ angular.module('starter.controllers', [])
     }
   };
 
+  function _albumLoginOK(album) {
+    Album.setCurrent = album;
+    window.localStorage.setItem(album.AlbumID, JSON.stringify({ AlbumName: album.AlbumName, TitleImage: "", ContributionUntil: album.ContributionUntil, pwd: $scope.data.pwd }));
+    $rootScope.albumPassword = $scope.data.pwd;
+    $location.url("/app/photo");
+  }
+
+  function _albumLoginFailed() {
+    $translate(['error', 'albums-login-bad']).then(function(trans) {
+      $ionicPopup.alert({
+         title: trans.error,
+         template: trans['albums-login-bad']
+       });
+   });
+  }
+
   $scope.select = function(album) {
     $scope.data.pwd = "";
     $rootScope.album = album;
 
     var storedPwd = window.localStorage.getItem(album.AlbumID);
     if (storedPwd) {
-      $rootScope.albumPassword = storedPwd;
+      storedPwd = JSON.parse(storedPwd);
+      //$rootScope.albumPassword = storedPwd.pwd;
+      Album.setCurrent(album);
       $location.url("/app/photo");
     }
     else
@@ -327,28 +435,8 @@ angular.module('starter.controllers', [])
 
         popUpProm.then(function(pwd) {
           if (!!pwd) {
-            var d = {
-              "AlbumId": album.AlbumID,
-              "AlbumPassword": pwd
-            };
-            $http.post($rootScope.url + "Albums/HasAccess", d)
-              .then(function(ok) {
-                if (!!ok.data) {
-                  window.localStorage.setItem(album.AlbumID, pwd);
-                  $rootScope.albumPassword = pwd;
-                  $location.url("/app/photo");
-                }
-                else
-                {
-                  $translate('error', 'albums-login-bad').then(function(trans) {
-                    $ionicPopup.alert({
-                       title: trans.error,
-                       template: trans['albums-login-bad']
-                     });
-                 })
-                }
-              })
-
+            var prom = Album.hasAccess(album, pwd);
+            prom.then(_albumLoginOK, _albumLoginFailed);
           }
         });
       });
@@ -362,13 +450,11 @@ angular.module('starter.controllers', [])
   }
 
   function _getAlbums(lat, lng) {
-    var url = $rootScope.url + "Albums?lat=" + lat + "&lng=" + lng;
-
     $translate('albums-getting-albums').then(function(tran) {
       $ionicLoading.show({
         template: "<i class='icon ion-load-c ion-spin'></i>&nbsp;" + tran
       });
-      $http.get(url).then(function(data) {
+      Album.getAlbums(lat, lng).then(function(data) {
         $scope.albums = data.data;
         for (var i=0; i < $scope.albums.length; i++) {
           var a = $scope.albums[i];
@@ -381,6 +467,13 @@ angular.module('starter.controllers', [])
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
         if (!$scope.$$phase) $scope.$apply();
+      }, function() {
+        $ionicLoading.hide();
+        //alert("Unable to get Albums. Please check your connection.");
+        $ionicPopup.alert({
+         title: 'Albums',
+         template: 'Unable to get albums. Please check your connection.'
+       });
       });
     });
   }

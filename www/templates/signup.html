@@ -25,10 +25,11 @@
   </ion-content>
 </ion-modal-view>
 -->
+<form name="signupForm">
 <ion-view view-title="Login">
   <ion-nav-buttons side="right">
-    <button class="button button-clear button-positive" ng-click="login()">
-      {{ 'login' | translate }}
+    <button class="button button-clear button-positive" ng-click="signup()" ng-disabled="!signupForm.$valid">
+      {{ 'signup' | translate }}
     </button>
   </ion-nav-buttons>
   <ion-content>
@@ -39,19 +40,24 @@
           <i class="icon ion-person placeholder-icon"></i>
           User name
         </span>
-        <input type="text" ng-model="data.UserName" placeholder="">
+        <input type="text" ng-model="data.UserName" placeholder="" ng-required="true">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">
+          <i class="icon ion-envelope placeholder-icon"></i>
+          Email
+        </span>
+        <input type="text" ng-model="data.EmailAddress" placeholder="" ng-required="true">
       </label>
       <label class="item item-input">
         <span class="input-label">
           <i class="icon ion-locked placeholder-icon"></i>
           Password
         </span>
-        <input type="password" ng-model="data.Password" placeholder="">
+        <input type="password" ng-model="data.Password" placeholder="" ng-required="true">
       </label>
-      <div class="item">
-        <a ui-sref="app.signup">Not Registered? Sign Up.</a>
-      </div>
     </div>
 
   </ion-content>
 </ion-view>
+</form>

@@ -1,27 +1,13 @@
-<ion-view view-title="Phuse!" hide-nav-bar="false">
+<ion-view view-title="" hide-nav-bar="false">
   <ion-content>
-      <!--
-      <button class="button button-block button-light" ng-click="createAlbum()">
-        <i class="icon ion-plus-circled"></i>
-        Create a new Album
-      </button>
-
-      <a class="button button-block button-light" ui-sref="app.albums">
-        <i class="icon ion-images"></i>
-        Contribute to an Album
-      </a>
-    -->
 
       <div class="home-page"></div>
         <div class="list card">
-          <!--
-          <a class="item item-icon-left" href="#" ng-click="createAlbum()">
-            <i class="icon ion-person"></i>
-            {{ "login" | translate }}
-          </a>
-          -->
-          <div class="item item-divider">
-            Hi, {{ creds.Username }}
+          <div class="item item-divider" ng-show="isLoggedIn()">
+            {{ "greeting" | translate }}, {{ getUsername() }}!
+            <span style="float: right;">
+              <a href="javascript: void(0)" ng-click="logout()">{{ "logout" | translate }}</a>
+            </span>
           </div>
           <a class="item item-icon-left" href="#" ng-click="createAlbum()">
             <i class="icon ion-image"></i>

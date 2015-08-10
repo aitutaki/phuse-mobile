@@ -1,10 +1,10 @@
-// Ionic Starter App
+// Ionic phuse App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controllers'])
+angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controllers', 'starter.services', 'starter.injectors'])
 .config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider, $translateProvider) {
 
   $ionicConfigProvider.backButton.text('');
@@ -26,7 +26,11 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
     'error': 'Error',
     'albums-login-bad': 'Incorrect password',
     'albums-enter-password': 'Enter album password',
-    'login': 'Login'
+    'login': 'Login',
+    'logout': 'Log out',
+    'signup': 'Sign Up',
+    'home': 'Home',
+    'greeting': 'Hi'
   });
 
   $translateProvider.translations('es', {
@@ -46,7 +50,11 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
     'error': 'Error',
     'albums-login-bad': 'Identificación no son correctos',
     'albums-enter-password': 'Introduzca álbum contraseña',
-    'login': 'Ingresar'
+    'login': 'Ingresar',
+    'logout': 'cerrar sesión',
+    'signup': 'contratar',
+    'home': 'Casa',
+    'greeting': 'Hola'
   });
 
 
@@ -80,6 +88,16 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
       'menuContent': {
         controller: 'LoginCtrl',
         templateUrl: "templates/login.html"
+      }
+    }
+  })
+
+  .state('app.signup', {
+    url: "/signup",
+    views: {
+      'menuContent': {
+        controller: 'SignUpCtrl',
+        templateUrl: "templates/signup.html"
       }
     }
   })

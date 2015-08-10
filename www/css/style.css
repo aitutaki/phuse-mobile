@@ -4,7 +4,7 @@
 }
 
 /*
-ion-header-bar {
+ion-header-bar, .view {
   background-color: #00a19c !important;
 }
 
@@ -14,6 +14,10 @@ button.button.back-button.buttons.button-clear.header-item {
 
 .bar.bar-stable .title {
   color: white !important;
+}
+
+button.button.button-icon.button-clear.ion-navicon {
+    color: white;
 }
 */
 
@@ -206,4 +210,13 @@ button.button.back-button.buttons.button-clear.header-item {
 .icon-200:before {
   line-height: 200px !important;
   font-size: 200px !important;
+}
+
+.albumForm label input {
+  font-size: 16px;
+}
+
+.menu-divider {
+  background-color: #eee;
+  padding: 8px 16px;
 }

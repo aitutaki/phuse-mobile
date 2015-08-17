@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controllers', 'starter.services', 'starter.injectors'])
+angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controllers', 'starter.services', 'starter.injectors', 'starter.directives'])
 .config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider, $translateProvider) {
 
   $ionicConfigProvider.backButton.text('');

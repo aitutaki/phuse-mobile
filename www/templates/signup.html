@@ -44,7 +44,7 @@
       </label>
       <label class="item item-input">
         <span class="input-label">
-          <i class="icon ion-envelope placeholder-icon"></i>
+          <i class="icon ion-email placeholder-icon"></i>
           Email
         </span>
         <input type="text" ng-model="data.EmailAddress" placeholder="" ng-required="true">
@@ -54,7 +54,14 @@
           <i class="icon ion-locked placeholder-icon"></i>
           Password
         </span>
-        <input type="password" ng-model="data.Password" placeholder="" ng-required="true">
+        <input type="password" ng-model="data.Password" name="password" placeholder="" ng-required="true">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">
+          <i class="icon ion-locked placeholder-icon"></i>
+          Repeat Password
+        </span>
+        <input type="password" ng-model="repeatPassword" name="repeatPassword" placeholder="" ng-required="true" password-match="data.Password">
       </label>
     </div>
 

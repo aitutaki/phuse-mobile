@@ -21,4 +21,21 @@ angular.module('starter.directives', []).directive ('passwordMatch', function ()
             });
         }
     };
+})
+.directive ('errIcon', function () {
+    return {
+        restrict: 'A',
+        scope:true,
+        //require: 'ngModel',
+        //template: "<i class='aitu-form-err fa fa-warning'></i>",
+        link: function (scope, elem , attrs, control) {
+          elem.after("<i class='aitu-form-err fa fa-warning' ng-show='!signupForm." + elem.attr("name") + ".$valid'></i>");
+        }
+    };
+    /*
+    return function(scope, elem, attrs, control) {
+      //elem.after("boo");
+      elem.after("<i class='aitu-form-err fa fa-warning' ng-show='!signupForm." + elem.attr("name") + ".$valid'></i>")
+    };
+    */
 });

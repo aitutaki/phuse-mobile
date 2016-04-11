@@ -220,3 +220,8 @@ button.button.button-icon.button-clear.ion-navicon {
   background-color: #eee;
   padding: 8px 16px;
 }
+
+i.aitu-form-err {
+    margin-right: 16px;
+    color: red;
+}

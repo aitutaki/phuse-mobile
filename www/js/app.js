@@ -4,11 +4,12 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controllers', 'starter.services', 'starter.injectors', 'starter.directives'])
-.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider, $translateProvider) {
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.injectors', 'starter.directives', 'starter.filters'])
+.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
 
   $ionicConfigProvider.backButton.text('');
 
+  /*
   $translateProvider.translations('en', {
     'home-new-album': 'Create a new album',
     'home-contribute': 'Contribute to an album',
@@ -62,92 +63,106 @@ angular.module('starter', ['ionic', 'pascalprecht.translate', 'starter.controlle
 
   $translateProvider.preferredLanguage('en');
   $translateProvider.fallbackLanguage('en');
+  */
 
   $stateProvider
-
-  .state('app', {
-    url: "/app",
-    abstract: true,
-    templateUrl: "templates/menu.html",
-    controller: 'AppCtrl'
-  })
-
-  .state('app.home', {
-    url: "/home",
-    views: {
-      'menuContent': {
-        controller: 'HomeCtrl',
-        templateUrl: "templates/home.html"
+    .state('app', {
+      url: "/app",
+      abstract: true,
+      templateUrl: "templates/menu.html",
+      controller: 'AppCtrl'
+    })
+    .state('app.home', {
+      url: "/home",
+      views: {
+        'menuContent': {
+          controller: 'HomeCtrl',
+          templateUrl: "templates/home.html"
+        }
       }
-    }
-  })
-
-  .state('app.login', {
-    url: "/login",
-    views: {
-      'menuContent': {
-        controller: 'LoginCtrl',
-        templateUrl: "templates/login.html"
+    })
+    .state('app.login', {
+      url: "/login",
+      views: {
+        'menuContent': {
+          controller: 'LoginCtrl',
+          templateUrl: "templates/login.html"
+        }
       }
-    }
-  })
-
-  .state('app.signup', {
-    url: "/signup",
-    views: {
-      'menuContent': {
-        controller: 'SignUpCtrl',
-        templateUrl: "templates/signup.html"
+    })
+    .state('app.signup', {
+      url: "/signup",
+      views: {
+        'menuContent': {
+          controller: 'SignUpCtrl',
+          templateUrl: "templates/signup.html"
+        }
       }
-    }
-  })
-
-  .state('app.albums', {
-    url: "/albums",
-    views: {
-      'menuContent': {
-        controller: 'AlbumsCtrl',
-        templateUrl: "templates/albums.html"
+    })
+    .state('app.albums', {
+      url: "/albums",
+      views: {
+        'menuContent': {
+          controller: 'AlbumsCtrl',
+          templateUrl: "templates/albums.html"
+        }
       }
-    }
-  })
-
-  .state('app.photo', {
-    url: "/photo",
-    views: {
-      'menuContent': {
-        controller: 'PhotoCtrl',
-        templateUrl: "templates/photo.html"
+    })
+    .state('app.photo', {
+      url: "/photo",
+      views: {
+        'menuContent': {
+          controller: 'PhotoCtrl',
+          templateUrl: "templates/photo.html"
+        }
       }
-    }
-  })
-  .state('app.album', {
-    url: "/album",
-    views: {
-      'menuContent': {
-        controller: 'albumCtrl',
-        templateUrl: "templates/album.html"
+    })
+    .state('app.album', {
+      url: "/album",
+      views: {
+        'menuContent': {
+          controller: 'albumCtrl',
+          templateUrl: "templates/album.html"
+        }
       }
-    }
-  })
+    })
+    .state('app.lang', {
+      url: "/lang",
+      views: {
+        'menuContent': {
+          controller: 'LangCtrl',
+          templateUrl: "templates/lang.html"
+        }
+      }
+    });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
 })
 
-.run(function($ionicPlatform, $translate) {
+.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
+        var lang = window.localStorage.getItem("lang");
+        if (lang) {
+          Culture.setLanguage(lang);
+        }
+        else {
+          if(typeof navigator.globalization !== "undefined") {
+            navigator.globalization.getPreferredLanguage(
+              function(language) {
+                //alert(JSON.stringify(language));
+                if (language) {
+                  Culture.setLanguage(language.split("-")[0]);
+                }
+              },
+              function() {
+                // Use default?
+              });
+          }
+        }
+    // }
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(typeof navigator.globalization !== "undefined") {
-        navigator.globalization.getPreferredLanguage(function(language) {
-            $translate.use((language.value).split("-")[0]).then(function(data) {
-                console.log("SUCCESS -> " + data);
-            }, function(error) {
-                console.log("ERROR -> " + error);
-            });
-        }, null);
-    }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
     }

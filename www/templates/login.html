@@ -26,32 +26,34 @@
 </ion-modal-view>
 -->
 <ion-view view-title="Login">
-  <ion-nav-buttons side="right">
-    <button class="button button-clear button-positive" ng-click="login()">
-      {{ 'login' | translate }}
-    </button>
-  </ion-nav-buttons>
-  <ion-content>
+    <ion-nav-buttons side="right">
+      <button class="button button-clear button-positive" ng-click="login()">
+        {{ 'login' | translateLabel }}
+      </button>
+    </ion-nav-buttons>
+    <ion-content>
 
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">
-          <i class="icon ion-person placeholder-icon"></i>
-          User name
-        </span>
-        <input type="text" ng-model="data.UserName" placeholder="">
-      </label>
-      <label class="item item-input">
-        <span class="input-label">
-          <i class="icon ion-locked placeholder-icon"></i>
-          Password
-        </span>
-        <input type="password" ng-model="data.Password" placeholder="">
-      </label>
-      <div class="item">
-        <a ui-sref="app.signup">Not Registered? Sign Up.</a>
+      <div class="list list-inset">
+        <form name="loginForm">
+        <label class="item item-input">
+          <span class="input-label">
+            <i class="icon ion-person placeholder-icon"></i>
+            {{ 'user_name' | translateLabel }}
+          </span>
+          <input type="text" ng-model="data.UserName" placeholder="" ng-required="true">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">
+            <i class="icon ion-locked placeholder-icon"></i>
+            {{ 'password' | translateLabel }}
+          </span>
+          <input type="password" ng-model="data.Password" placeholder="" ng-required="true">
+        </label>
+        <div class="item">
+          <a ui-sref="app.signup">{{ "not_registered" | translateLabel }}</a>
+        </div>
       </div>
-    </div>
 
-  </ion-content>
+      </form>
+    </ion-content>
 </ion-view>

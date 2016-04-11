@@ -4,18 +4,24 @@
       <div class="home-page"></div>
         <div class="list card">
           <div class="item item-divider" ng-show="isLoggedIn()">
-            {{ "greeting" | translate }}, {{ getUsername() }}!
+            {{ "greeting" | translateLabel }}, {{ getUsername() }}!
             <span style="float: right;">
-              <a href="javascript: void(0)" ng-click="logout()">{{ "logout" | translate }}</a>
+              <a href="javascript: void(0)" ng-click="logout()">{{ "logout" | translateLabel }}</a>
             </span>
           </div>
           <a class="item item-icon-left" href="#" ng-click="createAlbum()">
             <i class="icon ion-image"></i>
-            {{ "home-new-album" | translate }}
+            <!--
+            <span class="fa-stack">
+              <i class="fa fa-circle fa-stack-2x calm"></i>
+              <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+            </span>
+            -->
+            {{ "home_new_album" | translateLabel }}
           </a>
           <a class="item item-icon-left" ui-sref="app.albums">
             <i class="icon ion-camera"></i>
-            {{ "home-contribute" | translate }}
+            {{ "home_contribute" | translateLabel }}
           </a>
         </div>
 

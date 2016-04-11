@@ -25,11 +25,10 @@
   </ion-content>
 </ion-modal-view>
 -->
-<form name="signupForm">
-<ion-view view-title="Login">
+<ion-view view-title="{{ 'signup' | translateLabel }}">
   <ion-nav-buttons side="right">
-    <button class="button button-clear button-positive" ng-click="signup()" ng-disabled="!signupForm.$valid">
-      {{ 'signup' | translate }}
+    <button class="button button-clear button-positive" ng-click="signup()">
+      {{ 'sign_up' | translateLabel }}
     </button>
   </ion-nav-buttons>
   <ion-content>
@@ -38,28 +37,31 @@
       <label class="item item-input">
         <span class="input-label">
           <i class="icon ion-person placeholder-icon"></i>
-          User name
+          {{ "user_name" | translateLabel }}
         </span>
-        <input type="text" ng-model="data.UserName" placeholder="" ng-required="true">
+        <input type="text" name="UserName" ng-model="data.UserName" placeholder="" ng-required="true">
+        <!--
+        <i class="aitu-form-err fa fa-warning" ng-show="!signupForm.UserName.$valid"></i>
+        -->
       </label>
       <label class="item item-input">
         <span class="input-label">
           <i class="icon ion-email placeholder-icon"></i>
-          Email
+          {{ "email" | translateLabel }}
         </span>
         <input type="text" ng-model="data.EmailAddress" placeholder="" ng-required="true">
       </label>
       <label class="item item-input">
         <span class="input-label">
           <i class="icon ion-locked placeholder-icon"></i>
-          Password
+          {{ "password" | translateLabel }}
         </span>
         <input type="password" ng-model="data.Password" name="password" placeholder="" ng-required="true">
       </label>
       <label class="item item-input">
         <span class="input-label">
           <i class="icon ion-locked placeholder-icon"></i>
-          Repeat Password
+          {{ "repeat_password" | translateLabel }}
         </span>
         <input type="password" ng-model="repeatPassword" name="repeatPassword" placeholder="" ng-required="true" password-match="data.Password">
       </label>
@@ -67,4 +69,3 @@
 
   </ion-content>
 </ion-view>
-</form>

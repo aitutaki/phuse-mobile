@@ -29,24 +29,36 @@
       <ion-list>
         <ion-item nav-clear menu-close href="#/app/home">
           <i class="icon ion-home"></i>
-          {{ "home" | translate }}
+          {{ "home" | translateLabel }}
         </ion-item>
         <ion-item nav-clear menu-close ng-click="createAlbum()">
           <i class="icon ion-image"></i>
-          {{ "home-new-album" | translate }}
+          {{ "home_new_album" | translateLabel }}
         </ion-item>
         <ion-item nav-clear menu-close href="#/app/albums">
           <i class="icon ion-camera"></i>
-          {{ 'home-contribute' | translate }}
+          {{ 'home_contribute' | translateLabel }}
         </ion-item>
         <ion-item nav-clear menu-close ng-click="logout()" ng-show="isLoggedIn()">
-          {{ 'logout' | translate }}
+          {{ 'logout' | translateLabel }}
         </ion-item>
-        <ion-item class="menu-divider" ng-show="recents.length > 0">Recent Albums</ion-item>
+        <ion-item class="menu-divider" ng-show="recents.length > 0">{{ "recent_albums" | translateLabel }}</ion-item>
         <ion-item ng-repeat="a in recents" nav-clear menu-close ng-click="select(a)">
           {{ a.AlbumName }}
         </ion-item>
+        <ion-item nav-clear menu-close href="#/app/lang">
+          <i class="icon ion-home"></i>
+          {{ currLang() }}
+        </ion-item>
+        <!--
+        <ion-item class="menu-divider">{{ "available_languages" | translateLabel }}</ion-item>
+        <ion-item nav-clear menu-close ng-click="setLang(l.CultureName)" ng-repeat="l in getAvailableCultures()">
+          <i class="icon ion-home"></i>
+          {{ l.LocalName }}
+        </ion-item>
+        -->
       </ion-list>
+
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

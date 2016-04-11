@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $http, $ionicModal, $timeout, $ionicPopup, User) {
+.controller('AppCtrl', function($scope, $rootScope, $http, $ionicModal, $timeout, $ionicPopup, User, Culture) {
   // Form data for the login modal
-  $rootScope.url = "http://www.phuse-app.com/api/";
+  //Settings.url = "http://www.phuse-app.com/api/";
   $rootScope.imageURL = "http://www.phuse-app.com/";
 
   // Create the login modal that we will use later
@@ -47,6 +47,8 @@ angular.module('starter.controllers', [])
         });
       }
 
+      Culture.getAvailableCultures();
+
     } catch(e) {
       // nothing
     }
@@ -65,7 +67,7 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($scope, $location, $rootScope, $ionicPopup, $translate, User) {
+.controller('HomeCtrl', function($scope, $location, $rootScope, $ionicPopup, User) {
   $scope.selectAlbum = function() {
     $location.url("/app/albums");
   };
@@ -95,7 +97,28 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('MenuCtrl', function($scope, $location, $rootScope, $ionicPopup, $translate, User, Album) {
+.controller('LangCtrl', function($scope, $location, $rootScope, $ionicPopup, User, Culture) {
+  $scope.languages = [];
+
+  $scope.currLang = function() {
+    return Culture.currLang;
+  };
+
+  $scope.getAvailableCultures = function() {
+    Culture.getAvailableCultures().then(function(data) {
+      $scope.languages = data;
+    });
+  };
+
+  $scope.setLang = function(culture, name) {
+    var lang = culture.split("-")[0];
+    Culture.setLang(lang, name);
+  };
+
+  $scope.getAvailableCultures();
+})
+
+.controller('MenuCtrl', function($scope, $location, $rootScope, $ionicPopup, User, Album, Culture) {
   $scope.creds = $rootScope.creds;
   $scope.recents = [];
 
@@ -116,6 +139,20 @@ angular.module('starter.controllers', [])
     $location.url("/app/photo?albumID=" + obj.AlbumID);
   };
 
+  $scope.getAvailableCultures = function() {
+    return Culture.getAvailableCultures();
+  };
+
+  $scope.setLang = function(lang) {
+    var ar = lang.split("-");
+    Culture.setLanguage(ar[0]);
+    $rootScope.$digest();
+  };
+
+  $scope.currLang = function() {
+    return Culture.currLang().CultureName;
+  };
+
   $scope.recents = getRecent();
   $scope.createAlbum = function() {
     if (User.isLoggedIn()) {
@@ -129,7 +166,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('albumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $routeParams) {
+.controller('albumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, Culture, Settings) {
   $scope.data = {
     ContributeFromDate: null,
     ContributeFromTime: null,
@@ -151,25 +188,25 @@ angular.module('starter.controllers', [])
 
   //  $scope.data.contributeFrom =
 
-    $http.post($rootScope.url + "Albums/Post", $scope.data)
+    $http.post(Settings.url + "Albums/Post", $scope.data)
       .then(function(data) {
         $ionicPopup.alert({
-           title: "New Album",
-           template: "New album created."
+           title: Culture.translate("home_new_album"),
+           template: Culture.translate("new_album_created")
          }).then(function() {
            $location.url("/app/home");
          });
       })
       .error(function(err) {
         $ionicPopup.alert({
-           title: "Error",
-           template: "Unable to create album."
+           title: Culture.translate("error"),
+           template: Culture.translate("new_album_error")
          });
       });
   };
 })
 
-.controller('LoginCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $ionicLoading, User) {
+.controller('LoginCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, Culture, $ionicLoading, User) {
   $scope.data = {
     UserName: "",
     Password: ""
@@ -182,12 +219,18 @@ angular.module('starter.controllers', [])
 
   function _loginFailed() {
     $ionicLoading.hide();
+    $ionicPopup.alert({
+       title: Culture.translate("error"),
+       template: Culture.translate('albums_login_error')
+     });
+    /*
     $translate(['error', 'albums-login-error']).then(function(trans) {
       $ionicPopup.alert({
          title: trans.error,
          template: trans['albums-login-error']
        });
     });
+    */
   }
 
   $scope.login = function() {
@@ -197,7 +240,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('SignUpCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $ionicLoading, User) {
+.controller('SignUpCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, Culture, $ionicLoading, User) {
   $scope.data = {
     UserName: "",
     Password: "",
@@ -211,12 +254,10 @@ angular.module('starter.controllers', [])
 
   function _loginFailed() {
     $ionicLoading.hide();
-    $translate(['error', 'albums-signup-error']).then(function(trans) {
-      $ionicPopup.alert({
-         title: trans.error,
-         template: trans['albums-signup-error']
-       });
-    });
+    $ionicPopup.alert({
+       title: Culture.translate("error"),
+       template: Culture.translate('albums_signup_error')
+     });
   }
 
   $scope.signup = function() {
@@ -226,7 +267,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $routeParams, Album) {
+.controller('PhotoCtrl', function($scope, $location, $rootScope, $http, $routeParams, Album, Culture, Settings) {
   $scope.uploads = [];
   var albumID = $routeParams.albumID;
 
@@ -249,7 +290,7 @@ angular.module('starter.controllers', [])
             };
 
             $scope.uploads.push(data.PhotoId);
-            $http.post($rootScope.url + "Photos", data)
+            $http.post(Settings.url + "Photos", data)
               .success(function(res, status, headers) {
                 $scope.uploads.shift();
                 //$scope.capturePhoto();
@@ -258,8 +299,8 @@ angular.module('starter.controllers', [])
                 $scope.uploads.shift();
                 //alert("ERROR " + JSON.stringify(err));
                 $ionicPopup.alert({
-                 title: 'Upload',
-                 template: 'Unable to upload photo.'
+                 title: Culture.translate("upload"),
+                 template: Culture.translate("upload_error")
                });
               });
 
@@ -280,8 +321,8 @@ angular.module('starter.controllers', [])
     }
     catch(e) {
       $ionicPopup.alert({
-       title: 'Upload',
-       template: 'Unable to upload photo.'
+       title: Culture.translate("upload"),
+       template: Culture.translate("upload-error")
      });
     }
   }
@@ -311,7 +352,7 @@ angular.module('starter.controllers', [])
 
       $scope.uploads.push(data.PhotoId);
 
-      $http.post($rootScope.url + "Photos", data)
+      $http.post(Settings.url + "Photos", data)
         .then(function(data) {
         }, function(err) {
           alert("err " + err)
@@ -351,7 +392,7 @@ angular.module('starter.controllers', [])
 })
 */
 
-.controller('AlbumsCtrl', function($scope, $rootScope, $ionicLoading, $ionicPopup, $http, $location, $interval, $translate, Album) {
+.controller('AlbumsCtrl', function($scope, $rootScope, $ionicLoading, $ionicPopup, $http, $location, $interval, Culture, Album) {
   $scope.albums = [];
   $scope.coords = null;
   $scope.data = { pwd: "" };
@@ -389,12 +430,10 @@ angular.module('starter.controllers', [])
   }
 
   function _albumLoginFailed() {
-    $translate(['error', 'albums-login-bad']).then(function(trans) {
-      $ionicPopup.alert({
-         title: trans.error,
-         template: trans['albums-login-bad']
-       });
-   });
+    $ionicPopup.alert({
+       title: Culture.translate("login"),
+       template: Culture.translate('albums_login_bad')
+     });
   }
 
   $scope.select = function(album) {
@@ -410,35 +449,33 @@ angular.module('starter.controllers', [])
     }
     else
     {
-      $translate('albums-enter-password').then(function(tran) {
-        var popUpProm = $ionicPopup.show({
-          template: '<input type="password" ng-model="data.pwd">',
-          title: tran,
-          // subTitle: 'Please use normal things',
-          scope: $scope,
-          buttons: [
-            { text: 'Cancel' },
-            {
-              text: '<b>OK</b>',
-              type: 'button-positive',
-              onTap: function(e) {
-                if (!$scope.data.pwd) {
-                  //don't allow the user to close unless he enters wifi password
-                  e.preventDefault();
-                } else {
-                  return $scope.data.pwd;
-                }
+      var popUpProm = $ionicPopup.show({
+        template: '<input type="password" ng-model="data.pwd">',
+        title: Culture.translate("albums_enter_password"),
+        // subTitle: 'Please use normal things',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: '<b>OK</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              if (!$scope.data.pwd) {
+                //don't allow the user to close unless he enters wifi password
+                e.preventDefault();
+              } else {
+                return $scope.data.pwd;
               }
             }
-          ]
-        });
-
-        popUpProm.then(function(pwd) {
-          if (!!pwd) {
-            var prom = Album.hasAccess(album, pwd);
-            prom.then(_albumLoginOK, _albumLoginFailed);
           }
-        });
+        ]
+      });
+
+      popUpProm.then(function(pwd) {
+        if (!!pwd) {
+          var prom = Album.hasAccess(album, pwd);
+          prom.then(_albumLoginOK, _albumLoginFailed);
+        }
       });
     }
   };
@@ -450,55 +487,51 @@ angular.module('starter.controllers', [])
   }
 
   function _getAlbums(lat, lng) {
-    $translate('albums-getting-albums').then(function(tran) {
-      $ionicLoading.show({
-        template: "<i class='icon ion-load-c ion-spin'></i>&nbsp;" + tran
-      });
-      Album.getAlbums(lat, lng).then(function(data) {
-        $scope.albums = data.data;
-        for (var i=0; i < $scope.albums.length; i++) {
-          var a = $scope.albums[i];
-          var d = new Date(a.ContributionUntil);
-          var now = new Date();
-          if (d > now) {
-            a.timeRemaining = $scope.getTimeRemaining(a);
-          }
+    $ionicLoading.show({
+      template: "<i class='icon ion-load-c ion-spin'></i>&nbsp;" + Culture.translate("albums_getting_albums")
+    });
+    Album.getAlbums(lat, lng).then(function(data) {
+      $scope.albums = data.data;
+      for (var i=0; i < $scope.albums.length; i++) {
+        var a = $scope.albums[i];
+        var d = new Date(a.ContributionUntil);
+        var now = new Date();
+        if (d > now) {
+          a.timeRemaining = $scope.getTimeRemaining(a);
         }
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
-        if (!$scope.$$phase) $scope.$apply();
-      }, function() {
-        $ionicLoading.hide();
-        //alert("Unable to get Albums. Please check your connection.");
-        $ionicPopup.alert({
-         title: 'Albums',
-         template: 'Unable to get albums. Please check your connection.'
-       });
-      });
+      }
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+      if (!$scope.$$phase) $scope.$apply();
+    }, function() {
+      $ionicLoading.hide();
+      //alert("Unable to get Albums. Please check your connection.");
+      $ionicPopup.alert({
+       title: 'Albums',
+       template: 'Unable to get albums. Please check your connection.'
+     });
     });
   }
 
   function _getLoc () {
-    $translate('albums-getting-location').then(function(tran) {
-      $ionicLoading.show({
-        template: "<i class='icon ion-load-c ion-spin'></i>&nbsp;" + tran
-      });
+    $ionicLoading.show({
+      template: "<i class='icon ion-load-c ion-spin'></i>&nbsp;" + Culture.translate("albums_getting_location")
+    });
 
-      navigator.geolocation.getCurrentPosition(function(position) {
-          $scope.coords = position;
-          if (position && position.coords)
-          {
-            _getAlbums(position.coords.latitude, position.coords.longitude);
-          }
-          else {
-            _getAlbums(0, 0);
-          }
-        },
-        function(error) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        $scope.coords = position;
+        if (position && position.coords)
+        {
+          _getAlbums(position.coords.latitude, position.coords.longitude);
+        }
+        else {
           _getAlbums(0, 0);
         }
-      );
-    });
+      },
+      function(error) {
+        _getAlbums(0, 0);
+      }
+    );
   }
 
   _getLoc();

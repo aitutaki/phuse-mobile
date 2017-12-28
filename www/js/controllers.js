@@ -1,9 +1,8 @@
 angular.module('starter.controllers', [])
-
 .controller('AppCtrl', function($scope, $rootScope, $http, $ionicModal, $timeout, $ionicPopup, User) {
   // Form data for the login modal
-  $rootScope.url = "http://www.phuse-app.com/api/";
-  $rootScope.imageURL = "http://www.phuse-app.com/";
+  $rootScope.url = "http://localhost:8152/api/";
+  $rootScope.imageURL = "http://localhost:8152/";
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -131,23 +130,23 @@ angular.module('starter.controllers', [])
 
 .controller('albumCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $routeParams) {
   $scope.data = {
-    ContributeFromDate: null,
-    ContributeFromTime: null,
-    AlbumName: "",
-    VenueName: "",
-    VenueAddress: "",
-    VenueWifiName: "",
-    VenuePassword: "",
-    Password: ""
+    contributeFromDate: null,
+    contributeFromTime: null,
+    albumName: "",
+    venueName: "",
+    venueAddress: "",
+    venueWifiName: "",
+    venuePassword: "",
+    password: ""
   };
 
   $scope.save = function() {
 
-    var d = moment($scope.data.ContributeFromDate);
-    var t = moment($scope.data.ContributeFromTime);
-    $scope.data.ContributeFrom = moment(d.format("YYYY-MM-DD") + " " + t.format("HH:mm")).toISOString();
-    delete $scope.data.ContributeFromDate;
-    delete $scope.data.ContributeFromTime;
+    var d = moment($scope.data.contributeFromDate);
+    var t = moment($scope.data.contributeFromTime);
+    $scope.data.contributeFrom = moment(d.format("YYYY-MM-DD") + " " + t.format("HH:mm")).toISOString();
+    delete $scope.data.contributeFromDate;
+    delete $scope.data.contributeFromTime;
 
   //  $scope.data.contributeFrom =
 
@@ -171,8 +170,8 @@ angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope, $location, $rootScope, $http, $ionicPopup, $translate, $ionicLoading, User) {
   $scope.data = {
-    UserName: "",
-    Password: ""
+    username: "",
+    password: ""
   };
 
   function _loginOK() {
@@ -383,7 +382,8 @@ angular.module('starter.controllers', [])
 
   function _albumLoginOK(album) {
     Album.setCurrent = album;
-    window.localStorage.setItem(album.AlbumID, JSON.stringify({ AlbumName: album.AlbumName, TitleImage: "", ContributionUntil: album.ContributionUntil, pwd: $scope.data.pwd }));
+    // window.localStorage.setItem(album.AlbumID, JSON.stringify({ AlbumName: album.AlbumName, TitleImage: "", ContributionUntil: album.ContributionUntil, pwd: $scope.data.pwd }));
+    window.localStorage.setItem(album._id, JSON.stringify(album));
     $rootScope.albumPassword = $scope.data.pwd;
     $location.url("/app/photo");
   }
@@ -400,8 +400,9 @@ angular.module('starter.controllers', [])
   $scope.select = function(album) {
     $scope.data.pwd = "";
     $rootScope.album = album;
+    // return _albumLoginOK(album);
 
-    var storedPwd = window.localStorage.getItem(album.AlbumID);
+    var storedPwd = window.localStorage.getItem(album._id);
     if (storedPwd) {
       storedPwd = JSON.parse(storedPwd);
       //$rootScope.albumPassword = storedPwd.pwd;
@@ -467,7 +468,7 @@ angular.module('starter.controllers', [])
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
         if (!$scope.$$phase) $scope.$apply();
-      }, function() {
+      }, function(err) {
         $ionicLoading.hide();
         //alert("Unable to get Albums. Please check your connection.");
         $ionicPopup.alert({

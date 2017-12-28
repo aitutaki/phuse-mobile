@@ -40,7 +40,7 @@
           <i class="icon ion-person placeholder-icon"></i>
           User name
         </span>
-        <input type="text" ng-model="data.UserName" placeholder="" ng-required="true">
+        <input type="text" ng-model="data.email" placeholder="" ng-required="true">
       </label>
       <label class="item item-input">
         <span class="input-label">
@@ -54,14 +54,14 @@
           <i class="icon ion-locked placeholder-icon"></i>
           Password
         </span>
-        <input type="password" ng-model="data.Password" name="password" placeholder="" ng-required="true">
+        <input type="password" ng-model="data.password" name="password" placeholder="" ng-required="true">
       </label>
       <label class="item item-input">
         <span class="input-label">
           <i class="icon ion-locked placeholder-icon"></i>
           Repeat Password
         </span>
-        <input type="password" ng-model="repeatPassword" name="repeatPassword" placeholder="" ng-required="true" password-match="data.Password">
+        <input type="password" ng-model="repeatPassword" name="repeatPassword" placeholder="" ng-required="true" password-match="data.password">
       </label>
     </div>
 

@@ -1,5 +1,5 @@
 angular.module('starter.services', [])
-.factory('User', ['$http', "$rootScope", "$q", "$ionicLoading", function($http, $rootScope, $q, $ionicLoading) {
+.service('User', ['$http', "$rootScope", "$q", "$ionicLoading", function($http, $rootScope, $q, $ionicLoading) {
    var _userdata = null;
 
    /*
@@ -12,20 +12,12 @@ angular.module('starter.services', [])
      var def = $q.defer();
 
      $ionicLoading.show();
-     $http.post($rootScope.url + "Account/Login", creds)
+     $http.post($rootScope.url + "login", creds)
      .then(function(data) {
-         if (data.data && data.data == "true") {
-           _userdata = creds;
-           window.localStorage.setItem("creds", JSON.stringify(creds));
-           $ionicLoading.hide();
-           def.resolve(true);
-         }
-         else
-         {
-           _logout();
-           $ionicLoading.hide();
-           def.reject(false);
-         }
+         _userdata = creds;
+         window.localStorage.setItem("creds", JSON.stringify(creds));
+         $ionicLoading.hide();
+         def.resolve(true);
        }, function() {
          _logout();
          $ionicLoading.hide();
@@ -38,7 +30,7 @@ angular.module('starter.services', [])
      var def = $q.defer();
 
      $ionicLoading.show();
-     $http.post($rootScope.url + "Account/Register", creds)
+     $http.post($rootScope.url + "users", creds)
      .then(function(data) {
          if (data) {
            _userdata = creds;
@@ -61,7 +53,7 @@ angular.module('starter.services', [])
    }
 
    function _logout(remoteLogout) {
-     if (remoteLogout) $http.post($rootScope.url + "Account/Logoff", {});
+     if (remoteLogout) $http.post($rootScope.url + "logout", {});
      _userdata = null;
      window.localStorage.removeItem("creds");
    }
@@ -101,27 +93,25 @@ angular.module('starter.services', [])
      return ret;
    }
 
-   return {
-    getUserData: _getUserData,
-    isLoggedIn: _isLoggedIn,
-    login: _login,
-    signup: _signup,
-    getRecent: _getRecent,
-    logout: _logout
-   };
+  this.getUserData= _getUserData;
+  this.isLoggedIn= _isLoggedIn;
+  this.login= _login;
+  this.signup= _signup;
+  this.getRecent= _getRecent;
+  this.logout= _logout;
  }])
 
-.factory('Album', ['$http', "$rootScope", "$q", "$ionicLoading", function($http, $rootScope, $q, $ionicLoading) {
+.service('Album', ['$http', "$rootScope", "$q", "$ionicLoading", function($http, $rootScope, $q, $ionicLoading) {
 
     var _album = null;
 
     function _hasAccess (album, pwd) {
       var def = $q.defer();
       var d = {
-        "AlbumId": album.AlbumID,
-        "AlbumPassword": pwd
+        "_id": album._id,
+        "pwd": pwd
       };
-      $http.post($rootScope.url + "Albums/CanContribute", d)
+      $http.post($rootScope.url + "albums/canContribute", d)
         .then(function(ok) {
           if (ok.data) {
             def.resolve(album);
@@ -143,13 +133,11 @@ angular.module('starter.services', [])
     }
 
     function _getAlbums(lat, lng) {
-      return $http.get($rootScope.url + "Albums?lat=" + lat + "&lng=" + lng);
+      return $http.get($rootScope.url + "albums/active?lat=" + lat + "&lng=" + lng);
     }
 
-    return {
-      hasAccess: _hasAccess,
-      setCurrent: _setCurr,
-      getCurrent: _getCurr,
-      getAlbums: _getAlbums
-    };
+    this.hasAccess= _hasAccess;
+    this.setCurrent= _setCurr;
+    this.getCurrent= _getCurr;
+    this.getAlbums= _getAlbums;
   }]);
